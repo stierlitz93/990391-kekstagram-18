@@ -74,3 +74,42 @@ photos.forEach(function (elem) {
 });
 
 setupPictures.appendChild(fragment);
+// задание 6
+var bigPicture = document.querySelector('.big-picture');
+var socialComments = bigPicture.querySelector('.social__comments');
+var socialComment = socialComments.querySelectorAll('.social__comment');
+
+var commentTemplate = function (elem) {
+  elem.insertAdjacentHTML('afterbegin',
+      '<li class="social__comment">' +
+        '<img class="social__picture" width="35" height="35">' +
+        '<p class="social__text"></p>' +
+      '</li>'
+  );
+};
+
+var renderBigPicture = function (elem) {
+  bigPicture.classList.remove('hidden');
+
+  bigPicture.querySelector('.big-picture__img').querySelector('img').src = elem[0].url;
+  bigPicture.querySelector('.likes-count').textContent = elem[0].likes;
+  bigPicture.querySelector('.comments-count').textContent = elem[0].comments.length;
+  bigPicture.querySelector('.social__caption').textContent = elem[0].description;
+
+  socialComment.forEach(function (child) {
+    socialComments.removeChild(child);
+  });
+
+  for (i = 0; i < elem[0].comments.length; i++) {
+    commentTemplate(socialComments);
+
+    socialComments.querySelector('.social__comment').querySelector('img').src = elem[0].comments[i].avatar;
+    socialComments.querySelector('.social__comment').querySelector('img').alt = elem[0].comments[i].name;
+    socialComments.querySelector('.social__text').textContent = elem[0].comments[i].message;
+  }
+};
+
+bigPicture.querySelector('.social__comment-count').classList.add('.visually-hidden');
+bigPicture.querySelector('.comments-loader').classList.add('.visually-hidden');
+
+renderBigPicture(photos);
